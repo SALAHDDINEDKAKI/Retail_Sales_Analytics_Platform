@@ -1,5 +1,13 @@
 import pandas as pd
+import logging
+
 from pathlib import Path
+
+# ===== Logging Configuration =====
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(levelname)s: %(message)s"
+)
 
 #===== File path =====
 BASE_DIR = Path(__file__).resolve().parents[2]
@@ -12,22 +20,42 @@ CLEANED_XLSX = BASE_DIR / "data" / "cleaned" / "Adidas_US_Sales_Cleaned.xlsx"
 
 #===== Load data =====
 def load_data(file_path):
-    df = pd.read_excel(file_path, skiprows=4)
-    print("Data Loaded Successfully!")
+
+    if not file_path.exists():
+        raise FileNotFoundError(
+            f"File not found: {file_path}"
+        )
+    
+    df = pd.read_excel(
+        file_path,
+        skiprows=4
+    )
+
+    logging.info("Data Loaded Successfully!")
+
     return df
 
 #===== Data Cleaning =====
 def clean_data(df):
+
+    # Clean column names
+    df.columns = (
+        df.columns
+        .str.strip()
+    )
+
+    logging.info("Column Names Cleaned Successfully!")
+
     # Remove empty rows
     df = df.dropna(how="all")
 
     # Remove duplicates
     df = df.drop_duplicates()
-    print("Duplicates Removed Successfully!")
+    logging.info("Duplicates Removed Successfully!")
 
     # Checking missing values
     missing_values = df.isnull().sum()
-    print(f"Missing Values:\n{missing_values}")
+    logging.info(f"Missing Values:\n{missing_values}")
 
     # Convert date features
     df["Invoice Date"] = pd.to_datetime(
@@ -40,7 +68,24 @@ def clean_data(df):
     df["Month"] = df["Invoice Date"].dt.month
     df["Day"] = df["Invoice Date"].dt.day
 
-    print("Dates standardized Successfully!")
+    logging.info("Dates standardized Successfully!")
+
+    # Convert numeric columns
+    numeric_cols = [
+        "Price per Unit",
+        "Units Sold",
+        "Total Sales",
+        "Operating Profit",
+        "Operating Margin"
+    ]
+
+    for col in numeric_cols:
+        df[col] = pd.to_numeric(
+            df[col],
+            errors="coerce"
+        )
+
+    logging.info("Numeric Columns Converted Successfully!")
 
     # Normalize categorical columns
     categorical_cols = [
@@ -58,7 +103,7 @@ def clean_data(df):
             .str.strip()
         )
 
-    print("Categorical Columns Normalized Successfully!")
+    logging.info("Categorical Columns Normalized Successfully!")
 
     return df
 
@@ -70,7 +115,7 @@ def save_data(df):
     )
 
     df.to_csv(CLEANED_CSV, index=False)
-    print("\nCleaned Data Saved as CSV!")
+    logging.info(f"\nCleaned Data Saved at {CLEANED_CSV}")
 
     CLEANED_XLSX.parent.mkdir(
         parents=True,
@@ -78,7 +123,7 @@ def save_data(df):
     )
 
     df.to_excel(CLEANED_XLSX, index=False)
-    print("\nCleaned Data Saved as XLSX!")
+    logging.info(f"\nCleaned Data Saved at {CLEANED_XLSX}!")
     
 # ===== Main =====
 def main():
@@ -89,7 +134,7 @@ def main():
 
     save_data(df)
 
-    print("\nData Cleaning Process Completed Successfully!")
+    logging.info("\nData Cleaning Process Completed Successfully!")
 
 if __name__ == "__main__":
     main()
