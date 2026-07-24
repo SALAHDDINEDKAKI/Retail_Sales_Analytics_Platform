@@ -1,19 +1,50 @@
-# Virtual environment
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+build/
+dist/
+
+# ===== Virtual environment =====
+# The venv folder itself is never committed - it's machine-specific
+# and can always be rebuilt from requirements.txt
 .venv/
 venv/
 env/
-ENV/
-.env
 
-# Python cache
-__pycache__/
-*.py[cod]
-
-# Jupyter
+# ===== Jupyter =====
 .ipynb_checkpoints/
 
-# Environment variables
+# ===== Environment / secrets =====
+# NEVER commit real credentials. Only .env.example is tracked.
 .env
+*.env.local
 
-# VS Code
-.vscode/
+# ===== VSCode =====
+# We DO want to share settings.json and extensions.json with the
+# team/future-you, so only ignore the personal/machine-specific bits
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# ===== OS junk =====
+.DS_Store
+Thumbs.db
+
+# ===== Data =====
+# Large or sensitive raw data often should NOT be committed to git.
+# Uncomment the line below if your raw file is large (>50MB) or
+# contains anything you shouldn't publish. If it's small (a few MB,
+# public dataset), it's fine to leave it tracked - recruiters
+# reviewing your repo benefit from being able to actually run it.
+# data/raw/*
+# !data/raw/.gitkeep
+
+# ===== Power BI / Tableau =====
+# These tools sometimes create local cache/lock files
+*.pbix.bak
+~$*.pbix
+
+# ===== Logs =====
+*.log

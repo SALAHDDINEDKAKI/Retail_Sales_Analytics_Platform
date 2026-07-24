@@ -1,4 +1,4 @@
-Unnamed: 0,Retailer,Retailer ID,Invoice Date,Region,State,City,Product,Price per Unit,Units Sold,Total Sales,Operating Profit,Operating Margin,Sales Method,Year,Month,Day
+Unnamed: 0,retailer,retailer_id,invoice_date,region,state,city,product,price_per_unit,units_sold,total_sales,operating_profit,operating_margin,sales_method,year,month,day
 ,foot locker,1185732,2020-01-01,northeast,new york,new york,Men's Street Footwear,50.0,1200,600000.0,300000.0,0.5,In-store,2020,1,1
 ,foot locker,1185732,2020-01-02,northeast,new york,new york,Men's Athletic Footwear,50.0,1000,500000.0,150000.0,0.3,In-store,2020,1,2
 ,foot locker,1185732,2020-01-03,northeast,new york,new york,Women's Street Footwear,40.0,1000,400000.0,140000.0,0.35,In-store,2020,1,3
